@@ -2,13 +2,11 @@ package com.anderson.backend.controllers;
 
 import com.anderson.backend.models.EmployeeModel;
 import com.anderson.backend.services.EmployeeService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.Optional;
 @RestController
 @Validated
 @RequestMapping("/employee")
-@CrossOrigin("*")
+@Tag(name = "Empleados")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
@@ -27,9 +25,9 @@ public class EmployeeController {
         return this.employeeService.getAllEmployees();
     }
 
-    @GetMapping(path = "/{id}")
-    public Optional<EmployeeModel> getEmployeeById(@PathVariable("id") Long id){
-        return this.employeeService.getEmployeeById(id);
+    @GetMapping(path = "/{dni}")
+    public Optional<EmployeeModel> getEmployeeById(@PathVariable("dni") String dni){
+        return this.employeeService.getEmployeeByDni(dni);
     }
 
     @PostMapping
@@ -37,9 +35,9 @@ public class EmployeeController {
         return ResponseEntity.ok(this.employeeService.createEmployee(employee));
     }
 
-    @PutMapping(path = "/{id}")
-    public EmployeeModel updateEmployee(@PathVariable("id") Long id, @RequestBody EmployeeModel employeeInput){
-        return this.employeeService.updateEmployee(id, employeeInput);
+    @PutMapping
+    public EmployeeModel updateEmployee(@RequestBody EmployeeModel employeeInput){
+        return this.employeeService.updateEmployee(employeeInput.getId(), employeeInput);
     }
 
     @DeleteMapping(path = "/{id}")
