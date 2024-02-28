@@ -6,6 +6,7 @@ import type { AppProps } from "next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import { AppProvider } from "@/context/AppProvider";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -16,6 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </AppProvider>
       <ConfirmDialog />
+      <Toaster position="top-right" duration={1500} />
     </QueryClientProvider>
   );
 }
