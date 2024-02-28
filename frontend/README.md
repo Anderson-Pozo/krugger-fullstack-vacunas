@@ -1,9 +1,5 @@
 ## Frontend Kruger Prueba técnica
 
-### Descripción
-
-Este proyecto es una prueba técnica para la empresa Kruger Corp. El proyecto consiste en una aplicación web para gestionar inventario de vacunas de empleados, cuenta con dos roles de usuario: administrador y empleado. El administrador puede agregar, editar y eliminar empleados, El empleado puede actualizar su información personal y agregar información de su vacuna.
-
 ### Tecnologías
 
 - React
@@ -19,10 +15,16 @@ Este proyecto es una prueba técnica para la empresa Kruger Corp. El proyecto co
 1. Clonar el repositorio
 
 ```bash
-git clone
+git clone https://github.com/Anderson-Pozo/krugger-fullstack-vacunas.git
 ```
 
-2. Instalar las dependencias
+2. Ingresar al directorio frontend
+
+```bash
+cd frontend
+```
+
+3. Instalar las dependencias
 
 ```bash
 npm install
@@ -39,3 +41,5 @@ SERVER_URL=http://localhost:8080
 ```bash
 npm run dev
 ```
+
+5. Abrir el navegador y acceder a la siguiente URL: [http://localhost:3000](http://localhost:3000)

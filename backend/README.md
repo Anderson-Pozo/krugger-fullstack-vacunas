@@ -1,10 +1,5 @@
 ## Backend Kruger Prueba Técnica
 
-
-### Descripción
-
-Este proyecto es una prueba técnica para la empresa Kruger Corp. El proyecto consiste en una aplicación web para gestionar inventario de vacunas de empleados, cuenta con dos roles de usuario: administrador y empleado. El administrador puede agregar, editar y eliminar empleados, El empleado puede actualizar su información personal y agregar información de su vacuna.
-
 ### Tecnologías
 
 - Java 17
@@ -16,10 +11,29 @@ Este proyecto es una prueba técnica para la empresa Kruger Corp. El proyecto co
 
 ## Instalación
 
-1. Clonar este repositorio
+1. Clonar el repositorio
+
+```bash
+git clone https://github.com/Anderson-Pozo/krugger-fullstack-vacunas.git
+```
+
 2. Ingresar al directorio backend
+
+```bash
+cd backend
+```
+
 3. Abrir la carpeta backend en cualquier IDE de su preferencia
 4. Instalar las dependencias de Maven
-5. Ejecutar la aplicación 
+5. Ejecutar la aplicación
 
+## 📌 Notas
 
+No es necesario configurar la base de datos porque se está utilizando una base de datos en la nube. Si desea configurar una base de datos local, debe cambiar las credenciales en el archivo `application.properties`
+
+Ya existe un usuario administrador por defecto, sus credenciales son:
+
+- **USERNAME: 0401798475**
+- **PASSWORD: 0401798475**
+
+La documentación de Swagger se encuentra en la siguiente URL: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
