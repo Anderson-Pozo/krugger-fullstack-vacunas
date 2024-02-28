@@ -1,5 +1,6 @@
 package com.anderson.backend.services;
 
+import com.anderson.backend.models.UserModel;
 import com.anderson.backend.repositories.IUserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,12 +19,14 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+
     public AuthResponseDto login(LoginRequestDto request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         String token=jwtService.getToken(user);
         return AuthResponseDto.builder()
                 .token(token)
+                .user((UserModel) user)
                 .build();
     }
 }
