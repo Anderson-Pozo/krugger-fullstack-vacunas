@@ -196,11 +196,11 @@ export const EmployeeTable = () => {
         />
         <Column
           field="vaccinationDate"
-          filter
-          showFilterMenu={false}
-          filterElement={VaccineDateFilter}
-          filterHeaderStyle={{ maxWidth: "14rem" }}
           header="Fecha vacunación"
+          // filter
+          // showFilterMenu={false}
+          // filterElement={VaccineDateFilter}
+          // filterHeaderStyle={{ maxWidth: "14rem" }}
         />
         <Column field="doseNumber" header="Dosis" />
         <Column
