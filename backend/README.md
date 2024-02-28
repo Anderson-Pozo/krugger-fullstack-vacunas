@@ -36,4 +36,6 @@ Ya existe un usuario administrador por defecto, sus credenciales son:
 - **USERNAME: 0401798475**
 - **PASSWORD: 0401798475**
 
+Cuando se crea un nuevo empleado automaticamente se crea un usuario por defecto, y debe ingresar con su número de cédula como usuario y contraseña.
+
 La documentación de Swagger se encuentra en la siguiente URL: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
