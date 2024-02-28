@@ -12,18 +12,33 @@ export interface IEmployee {
   vaccineType: string | null;
   vaccinationDate: string | null;
   doseNumber: number | null;
+  user: IUser | null;
 };
+
+export interface IEmployeeInput extends Partial<IEmployee> { };
 
 export interface IUser {
   id: number;
   username: string;
   fullname: string;
-  email: string;
   password: string;
+  email: string;
   role: string;
-};
+  enabled: boolean;
+  credentialsNonExpired: boolean;
+  accountNonExpired: boolean;
+  authorities: Authority[];
+  accountNonLocked: boolean;
+}
 
-export interface IEmployeeInput extends Partial<IEmployee> { };
+export interface Authority {
+  authority: string;
+}
+
+export interface ILoginResponse {
+  user: IUser;
+  token: string;
+}
 
 export interface IFormFields {
   firstName: string;
