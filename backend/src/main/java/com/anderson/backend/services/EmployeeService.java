@@ -42,6 +42,10 @@ public class EmployeeService {
         return this.employeeRepository.findById(id);
     }
 
+    public Optional<EmployeeModel> getEmployeeByDni(String dni){
+        return this.employeeRepository.findByIdentificationNumber(dni);
+    }
+
     public EmployeeModel updateEmployee(Long id, EmployeeModel employeeInput){
         EmployeeModel employee = this.employeeRepository.findById(id).get();
         employee.setIdentificationNumber(employeeInput.getIdentificationNumber());
