@@ -16,10 +16,10 @@ import { deleteEmployee, fetchEmployees } from "@/service/employee";
 import { AppContext } from "@/context/AppContext";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
-import { TableFilter } from "./TableFilter";
+import { toast } from "sonner";
 
 export const EmployeeTable = () => {
-  const ROWS_PER_PAGE = 10;
+  const ROWS_PER_PAGE = 5;
   const queryClient = useQueryClient();
   const { setOpenModal, setSelectedEmployee } = useContext(AppContext);
   const [employees, setEmployees] = useState<IEmployee[]>([]);
@@ -31,7 +31,7 @@ export const EmployeeTable = () => {
     },
   });
 
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ["getEmployees"],
     queryFn: fetchEmployees,
   });
@@ -54,14 +54,11 @@ export const EmployeeTable = () => {
           await deleteEmployeeMt.mutateAsync(id);
         } catch (error) {
           console.error({ error });
-          alert("Error al eliminar el empleado");
+          toast.error("Error al eliminar el empleado");
         }
       },
     });
   };
-
-  // console.log({ data });
-  if (error) return "An error has occurred: " + error.message;
 
   const actionBodyTemplate = (employeeData: IEmployee) => {
     return (
@@ -120,8 +117,6 @@ export const EmployeeTable = () => {
   };
 
   const VaccineDateFilter = (options: ColumnFilterElementTemplateOptions) => {
-    // console.log({ options });
-
     return (
       <Calendar
         value={options.value ? new Date(options.value) : null}

@@ -12,11 +12,15 @@ import { createEmployee, updateEmployee } from "@/service/employee";
 import { getErrorMessage } from "@/helpers/ErrorHelper";
 import { AppContext } from "@/context/AppContext";
 import { IFormFields } from "@/types/definitions";
+import { USER_ROLES } from "@/constants/user";
+import { toast } from "sonner";
 
 export const EmployeeForm = () => {
   const queryClient = useQueryClient();
-  const { selectedEmployee, setOpenModal, setSelectedEmployee } =
+  const { selectedEmployee, setOpenModal, setSelectedEmployee, user } =
     useContext(AppContext);
+  const isEmployee = user?.role === USER_ROLES.EMPLOYEE;
+
   const {
     register,
     reset,
@@ -27,10 +31,9 @@ export const EmployeeForm = () => {
 
   useEffect(() => {
     if (selectedEmployee) {
-      console.log({ selectedEmployee });
-
+      const { user, ...restEmployee } = selectedEmployee;
       reset({
-        ...selectedEmployee,
+        ...restEmployee,
         dateOfBirth: selectedEmployee.dateOfBirth
           ? new Date(selectedEmployee.dateOfBirth!)
           : null,
@@ -51,7 +54,6 @@ export const EmployeeForm = () => {
   const updateEmployeeMt = useMutation({ mutationFn: updateEmployee });
 
   const onSubmit = async (data: IFormFields) => {
-    // console.log(data);
     try {
       const formatData = {
         ...data,
@@ -60,29 +62,26 @@ export const EmployeeForm = () => {
         vaccineType: data.vaccineType?.name,
         vaccinationStatus: data.vaccinationStatus?.name,
       };
-      // console.log({ formatData });
 
       if (selectedEmployee) {
-        const responseAct = await updateEmployeeMt.mutateAsync({
+        await updateEmployeeMt.mutateAsync({
           id: selectedEmployee.id,
           ...formatData,
         });
-        // console.log({ responseAct });
       } else {
-        const response = await createEmployeeMt.mutateAsync(formatData);
-        // console.log({ response });
+        await createEmployeeMt.mutateAsync(formatData);
+        reset({});
       }
-      alert("Información procesada con éxito");
+      toast.info("Información guardada correctamente");
     } catch (error) {
       console.error({ error });
-      alert("Error al guardar el empleado");
+      toast.error("Error al guardar el empleado");
     } finally {
       resetForm();
     }
   };
 
   const resetForm = () => {
-    reset({});
     setOpenModal(false);
     setSelectedEmployee(null);
     queryClient.invalidateQueries({ queryKey: ["getEmployees"] });
@@ -209,107 +208,111 @@ export const EmployeeForm = () => {
             keyfilter="int"
           />
         </div>
-        <div className="col-span-3">
-          <hr className="my-1" />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor="vaccinationStatus" className="font-medium">
-            Estado
-          </label>
-          <Controller
-            name="vaccinationStatus"
-            control={control}
-            rules={{ required: false }}
-            render={({ field, fieldState }) => (
-              <Dropdown
-                id={field.name}
-                value={field.value}
-                optionLabel="code"
-                placeholder="Seleccione un estado"
-                options={statusOptions}
-                focusInputRef={field.ref}
-                onChange={(e) => field.onChange(e.value)}
-                className={classNames(
-                  { "p-invalid": fieldState.error },
-                  "p-inputtext-sm w-full md:w-14rem"
+        {isEmployee && (
+          <>
+            <div className="col-span-3">
+              <hr className="my-1" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="vaccinationStatus" className="font-medium">
+                Estado
+              </label>
+              <Controller
+                name="vaccinationStatus"
+                control={control}
+                rules={{ required: false }}
+                render={({ field, fieldState }) => (
+                  <Dropdown
+                    id={field.name}
+                    value={field.value}
+                    optionLabel="code"
+                    placeholder="Seleccione un estado"
+                    options={statusOptions}
+                    focusInputRef={field.ref}
+                    onChange={(e) => field.onChange(e.value)}
+                    className={classNames(
+                      { "p-invalid": fieldState.error },
+                      "p-inputtext-sm w-full md:w-14rem"
+                    )}
+                  />
                 )}
               />
-            )}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor="vaccineType" className="font-medium">
-            Tipo de vacuna
-          </label>
-          <Controller
-            name="vaccineType"
-            control={control}
-            rules={{ required: false }}
-            render={({ field, fieldState }) => (
-              <Dropdown
-                id={field.name}
-                value={field.value}
-                optionLabel="code"
-                placeholder="Seleccione un tipo"
-                options={vaccineTypeOptions}
-                focusInputRef={field.ref}
-                onChange={(e) => field.onChange(e.value)}
-                className={classNames(
-                  { "p-invalid": fieldState.error },
-                  "p-inputtext-sm w-full md:w-14rem"
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="vaccineType" className="font-medium">
+                Tipo de vacuna
+              </label>
+              <Controller
+                name="vaccineType"
+                control={control}
+                rules={{ required: false }}
+                render={({ field, fieldState }) => (
+                  <Dropdown
+                    id={field.name}
+                    value={field.value}
+                    optionLabel="code"
+                    placeholder="Seleccione un tipo"
+                    options={vaccineTypeOptions}
+                    focusInputRef={field.ref}
+                    onChange={(e) => field.onChange(e.value)}
+                    className={classNames(
+                      { "p-invalid": fieldState.error },
+                      "p-inputtext-sm w-full md:w-14rem"
+                    )}
+                  />
                 )}
               />
-            )}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor="vaccinationDate" className="font-medium">
-            Fecha de vacunación
-          </label>
-          <Controller
-            name="vaccinationDate"
-            control={control}
-            rules={{ required: false }}
-            render={({ field, fieldState }) => (
-              <>
-                <Calendar
-                  inputId={field.name}
-                  value={field.value}
-                  onChange={field.onChange}
-                  dateFormat="dd/mm/yy"
-                  className={classNames(
-                    { "p-invalid": fieldState.error },
-                    "p-inputtext-sm"
-                  )}
-                />
-              </>
-            )}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label htmlFor="doseNumber" className="font-medium">
-            Número de dosis
-          </label>
-          <Controller
-            name="doseNumber"
-            control={control}
-            rules={{ required: false }}
-            render={({ field, fieldState }) => (
-              <InputNumber
-                id={field.name}
-                inputRef={field.ref}
-                value={field.value}
-                onBlur={field.onBlur}
-                onValueChange={(e: any) => field.onChange(e)}
-                useGrouping={false}
-                inputClassName={classNames(
-                  { "p-invalid": fieldState.error },
-                  "p-inputtext-sm"
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="vaccinationDate" className="font-medium">
+                Fecha de vacunación
+              </label>
+              <Controller
+                name="vaccinationDate"
+                control={control}
+                rules={{ required: false }}
+                render={({ field, fieldState }) => (
+                  <>
+                    <Calendar
+                      inputId={field.name}
+                      value={field.value}
+                      onChange={field.onChange}
+                      dateFormat="dd/mm/yy"
+                      className={classNames(
+                        { "p-invalid": fieldState.error },
+                        "p-inputtext-sm"
+                      )}
+                    />
+                  </>
                 )}
               />
-            )}
-          />
-        </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="doseNumber" className="font-medium">
+                Número de dosis
+              </label>
+              <Controller
+                name="doseNumber"
+                control={control}
+                rules={{ required: false }}
+                render={({ field, fieldState }) => (
+                  <InputNumber
+                    id={field.name}
+                    inputRef={field.ref}
+                    value={field.value}
+                    onBlur={field.onBlur}
+                    onValueChange={(e: any) => field.onChange(e)}
+                    useGrouping={false}
+                    inputClassName={classNames(
+                      { "p-invalid": fieldState.error },
+                      "p-inputtext-sm"
+                    )}
+                  />
+                )}
+              />
+            </div>
+          </>
+        )}
       </div>
       <div className="flex flex-col gap-1 mt-3">
         <Button
