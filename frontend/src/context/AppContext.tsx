@@ -1,4 +1,4 @@
-import { IEmployee } from "@/types/definitions";
+import { IEmployee, IUser } from "@/types/definitions";
 import { Dispatch, SetStateAction, createContext } from "react";
 
 interface ContextProps {
@@ -6,6 +6,9 @@ interface ContextProps {
   setSelectedEmployee: Dispatch<SetStateAction<IEmployee | null>>;
   openModal: boolean;
   setOpenModal: Dispatch<SetStateAction<boolean>>;
+  loginUser: (username: string, password: string) => Promise<void>;
+  logout: () => void;
+  user: IUser | undefined;
 }
 
 export const AppContext = createContext({} as ContextProps);
